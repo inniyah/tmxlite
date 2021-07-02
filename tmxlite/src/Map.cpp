@@ -63,7 +63,10 @@ bool Map::loadFromAdapter(const IOAdapter& adapter, const std::string& path)
     reset();
 
     auto reader = adapter.open(path);
-    char* contents = static_cast<char*>(pugi::get_memory_allocation_function()(reader->size()));
+    auto content_size = reader->size();
+    char* contents = static_cast<char*>(pugi::get_memory_allocation_function()(content_size));
+
+    reader->readBytes(contents, content_size);
 
     //open the doc
     pugi::xml_document doc;

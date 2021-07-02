@@ -46,7 +46,7 @@ void FilesystemIOReader::seek(std::size_t pos)
     m_stream.seekg(pos);
 }
 
-void FilesystemIOReader::readBytes(std::size_t count, char* buffer)
+void FilesystemIOReader::readBytes(char* buffer, std::size_t count)
 {
     m_stream.read(buffer, count);
 }

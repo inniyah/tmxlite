@@ -34,7 +34,6 @@ source distribution.
 
 namespace tmx
 {
-
     class TMXLITE_EXPORT_API IOReader
     {
     public:
@@ -46,7 +45,7 @@ namespace tmx
         IOReader& operator = (IOReader&&) = default;
 
         virtual void seek(std::size_t pos) = 0;
-        virtual void readBytes(std::size_t count, char* buffer) = 0;
+        virtual void readBytes(char* buffer, std::size_t count) = 0;
         virtual std::size_t size() = 0;
     };
 
@@ -58,22 +57,6 @@ namespace tmx
         virtual std::unique_ptr<IOReader> open(const std::string& name) const = 0;
     };
 
-    class TMXLITE_EXPORT_API MemoryIOReader : public IOReader
-    {
-    public:
-        MemoryIOReader() = delete;
-        MemoryIOReader(const char* buffer, std::size_t size);
-        virtual ~MemoryIOReader();
-
-        virtual void seek(std::size_t pos);
-        virtual void readBytes(std::size_t count, char* buffer);
-        virtual std::size_t size();
-
-    private:
-        const char* m_buffer;
-        std::size_t m_size;
-    };
-
     class TMXLITE_EXPORT_API FilesystemIOReader : public IOReader
     {
     public:
@@ -82,7 +65,7 @@ namespace tmx
         virtual ~FilesystemIOReader();
 
         virtual void seek(std::size_t pos);
-        virtual void readBytes(std::size_t count, char* buffer);
+        virtual void readBytes(char* buffer, std::size_t count);
         virtual std::size_t size();
 
     private:
@@ -98,5 +81,4 @@ namespace tmx
 
         virtual std::unique_ptr<IOReader> open(const std::string& name) const;
     };
-
 }
