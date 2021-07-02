@@ -135,7 +135,7 @@ namespace tmx
         If node parsing fails an error is printed in the console
         and the Tileset remains in an uninitialised state.
         */
-        void parse(pugi::xml_node, Map*);
+        void parse(pugi::xml_node, const IOAdapter&, Map*);
 
         /*!
         \brief Returns the first GID of this tile set.
@@ -282,7 +282,7 @@ namespace tmx
         void parseOffsetNode(const pugi::xml_node&);
         void parsePropertyNode(const pugi::xml_node&);
         void parseTerrainNode(const pugi::xml_node&);
-        void parseTileNode(const pugi::xml_node&, Map*);
+        void parseTileNode(const pugi::xml_node&, const IOAdapter&, Map*);
         void createMissingTile(std::uint32_t ID);
     };
 }

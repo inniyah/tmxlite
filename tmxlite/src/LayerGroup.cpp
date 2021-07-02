@@ -41,7 +41,7 @@ LayerGroup::LayerGroup(const std::string& workingDir, const Vector2u& tileCount)
 }
 
 //public
-void LayerGroup::parse(const pugi::xml_node& node, Map* map)
+void LayerGroup::parse(const pugi::xml_node& node, const IOAdapter& adapter, Map* map)
 {
     assert(map);
     std::string attribString = node.name();
@@ -71,22 +71,22 @@ void LayerGroup::parse(const pugi::xml_node& node, Map* map)
         else if (attribString == "layer")
         {
             m_layers.emplace_back(std::make_unique<TileLayer>(m_tileCount.x * m_tileCount.y));
-            m_layers.back()->parse(child, map);
+            m_layers.back()->parse(child, adapter, map);
         }
         else if (attribString == "objectgroup")
         {
             m_layers.emplace_back(std::make_unique<ObjectGroup>());
-            m_layers.back()->parse(child, map);
+            m_layers.back()->parse(child, adapter, map);
         }
         else if (attribString == "imagelayer")
         {
             m_layers.emplace_back(std::make_unique<ImageLayer>(m_workingDir));
-            m_layers.back()->parse(child, map);
+            m_layers.back()->parse(child, adapter, map);
         }
         else if (attribString == "group")
         {
             m_layers.emplace_back(std::make_unique<LayerGroup>(m_workingDir, m_tileCount));
-            m_layers.back()->parse(child, map);
+            m_layers.back()->parse(child, adapter, map);
         }
         else
         {

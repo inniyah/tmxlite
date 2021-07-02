@@ -44,7 +44,7 @@ namespace tmx
         explicit ImageLayer(const std::string&);
 
         Type getType() const override { return Layer::Type::Image; }
-        void parse(const pugi::xml_node&, Map*) override;
+        void parse(const pugi::xml_node&, const IOAdapter&, Map*) override;
 
         /*!
         \brief Returns the path, relative to the working directory,

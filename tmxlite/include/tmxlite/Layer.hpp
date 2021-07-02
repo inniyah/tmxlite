@@ -28,6 +28,7 @@ source distribution.
 #pragma once
 
 #include <tmxlite/Config.hpp>
+#include <tmxlite/IO.hpp>
 #include <tmxlite/Property.hpp>
 #include <tmxlite/Types.hpp>
 
@@ -101,7 +102,7 @@ namespace tmx
         /*!
         \brief Attempts to parse the specific node layer type
         */
-        virtual void parse(const pugi::xml_node&, Map* = nullptr) = 0;
+        virtual void parse(const pugi::xml_node&, const IOAdapter&, Map* = nullptr) = 0;
 
         /*!
         \brief Returns the name of the layer

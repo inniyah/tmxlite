@@ -54,11 +54,20 @@ Map::Map()
 //public
 bool Map::load(const std::string& path)
 {
+    FilesystemIOAdapter adapter;
+    return loadFromAdapter(adapter, path);
+}
+
+bool Map::loadFromAdapter(const IOAdapter& adapter, const std::string& path)
+{
     reset();
+
+    auto reader = adapter.open(path);
+    char* contents = static_cast<char*>(pugi::get_memory_allocation_function()(reader->size()));
 
     //open the doc
     pugi::xml_document doc;
-    auto result = doc.load_file(path.c_str());
+    auto result = doc.load_buffer_inplace_own(contents, reader->size());
     if (!result)
     {
         Logger::log("Failed opening " + path, Logger::Type::Error);
@@ -86,11 +95,12 @@ bool Map::load(const std::string& path)
         return reset();
     }
 
-    return parseMapNode(mapNode);
+    return parseMapNode(mapNode, adapter);
 }
 
 bool Map::loadFromString(const std::string& data, const std::string& workingDir)
 {
+    FilesystemIOAdapter adapter;
     reset();
 
     //open the doc
@@ -122,11 +132,11 @@ bool Map::loadFromString(const std::string& data, const std::string& workingDir)
         return reset();
     }
 
-    return parseMapNode(mapNode);
+    return parseMapNode(mapNode, adapter);
 }
 
 //private
-bool Map::parseMapNode(const pugi::xml_node& mapNode)
+bool Map::parseMapNode(const pugi::xml_node& mapNode, const IOAdapter& adapter)
 {
     //parse map attributes
     std::size_t pointPos = 0;
@@ -282,22 +292,22 @@ bool Map::parseMapNode(const pugi::xml_node& mapNode)
         if (name == "tileset")
         {
             m_tilesets.emplace_back(m_workingDirectory);
-            m_tilesets.back().parse(node, this);
+            m_tilesets.back().parse(node, adapter, this);
         }
         else if (name == "layer")
         {
             m_layers.emplace_back(std::make_unique<TileLayer>(m_tileCount.x * m_tileCount.y));
-            m_layers.back()->parse(node);
+            m_layers.back()->parse(node, adapter);
         }
         else if (name == "objectgroup")
         {
             m_layers.emplace_back(std::make_unique<ObjectGroup>());
-            m_layers.back()->parse(node, this);
+            m_layers.back()->parse(node, adapter, this);
         }
         else if (name == "imagelayer")
         {
             m_layers.emplace_back(std::make_unique<ImageLayer>(m_workingDirectory));
-            m_layers.back()->parse(node, this);
+            m_layers.back()->parse(node, adapter, this);
         }
         else if (name == "properties")
         {
@@ -311,7 +321,7 @@ bool Map::parseMapNode(const pugi::xml_node& mapNode)
         else if (name == "group")
         {
             m_layers.emplace_back(std::make_unique<LayerGroup>(m_workingDirectory, m_tileCount));
-            m_layers.back()->parse(node, this);
+            m_layers.back()->parse(node, adapter, this);
         }
         else
         {

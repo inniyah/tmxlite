@@ -27,6 +27,7 @@ source distribution.
 
 #pragma once
 
+#include <tmxlite/IO.hpp>
 #include <tmxlite/Tileset.hpp>
 #include <tmxlite/Layer.hpp>
 #include <tmxlite/Property.hpp>
@@ -107,6 +108,8 @@ namespace tmx
         In debug mode this will attempt to log any errors to the console.
         */
         bool load(const std::string&);
+
+        bool loadFromAdapter(const IOAdapter& adapter, const std::string& name);
 
         /*!
         \brief Loads a map from a document stored in a string
@@ -260,7 +263,7 @@ namespace tmx
         std::unordered_map<std::string, Object> m_templateObjects;
         std::unordered_map<std::string, Tileset> m_templateTilesets;
 
-        bool parseMapNode(const pugi::xml_node&);
+        bool parseMapNode(const pugi::xml_node&, const IOAdapter& adapter);
 
         //always returns false so we can return this
         //on load failure
