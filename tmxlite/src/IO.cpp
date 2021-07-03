@@ -30,15 +30,16 @@ source distribution.
 
 using namespace tmx;
 
-FilesystemIOReader::FilesystemIOReader(std::ifstream&& stream) : m_stream(stream)
+FilesystemIOReader::FilesystemIOReader(std::ifstream&& stream) : m_stream(std::move(stream))
 {
   m_stream.seekg(0, std::ios_base::end);
   m_size = m_stream.tellg();
-  m_stream.seekg(0);
+  m_stream.seekg(0, std::ios_base::beg);
 }
 
 FilesystemIOReader::~FilesystemIOReader()
 {
+
 }
 
 void FilesystemIOReader::seek(std::size_t pos)
@@ -59,7 +60,6 @@ std::size_t FilesystemIOReader::size()
 
 FilesystemIOAdapter::FilesystemIOAdapter()
 {
-
 }
 
 std::unique_ptr<IOReader> FilesystemIOAdapter::open(const std::string& name) const

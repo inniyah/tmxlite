@@ -86,8 +86,14 @@ void Tileset::parse(pugi::xml_node node, const IOAdapter& adapter, Map* map)
             m_workingDir = "";
         }
 
-        //see if doc can be opened
-        auto result = tsxDoc.load_file(path.c_str());
+        auto reader = adapter.open(path);
+        auto content_size = reader->size();
+        char* contents = static_cast<char*>(pugi::get_memory_allocation_function()(content_size));
+
+        reader->readBytes(contents, content_size);
+
+        //open the doc
+        auto result = tsxDoc.load_buffer_inplace_own(contents, reader->size());
         if (!result)
         {
             Logger::log("Failed opening tsx file for tile set, tile set will be skipped", Logger::Type::Error);
