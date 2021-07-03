@@ -69,7 +69,7 @@ namespace tmx
         virtual std::size_t size();
 
     private:
-        std::ifstream& m_stream;
+        std::ifstream m_stream;
         std::size_t m_size;
     };
 
