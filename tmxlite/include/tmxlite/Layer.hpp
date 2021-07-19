@@ -135,8 +135,13 @@ namespace tmx
         */
         const std::vector<Property>& getProperties() const { return m_properties; }
 
-    protected:
+        /*!
+        \brief Returns ID of this layer
+        */
+        const uint32_t getID() const {return m_id;}
 
+    protected:
+        void setID(uint32_t id){m_id = id;}
         void setName(const std::string& name) { m_name = name; }
         void setOpacity(float opacity) { m_opacity = opacity; }
         void setVisible(bool visible) { m_visible = visible; }
@@ -145,6 +150,7 @@ namespace tmx
         void addProperty(const pugi::xml_node& node) { m_properties.emplace_back(); m_properties.back().parse(node); }
 
     private:
+        uint32_t m_id;
         std::string m_name;
         float m_opacity;
         bool m_visible;
