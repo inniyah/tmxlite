@@ -68,6 +68,7 @@ std::unique_ptr<IOReader> FilesystemIOAdapter::open(const std::string& name) con
     if(!stream)
     {
         // TODO: better error handling?
+        throw std::runtime_error("Could not open file " + name);
         return {};
     }
 
