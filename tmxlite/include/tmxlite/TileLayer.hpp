@@ -70,7 +70,7 @@ namespace tmx
         explicit TileLayer(std::size_t);
 
         Type getType() const override { return Layer::Type::Tile; }
-        void parse(const pugi::xml_node&, Map*) override;
+        void parse(const pugi::xml_node&, const IOAdapter&, Map*) override;
 
         /*!
         \brief Returns the list of tiles used to make up the layer

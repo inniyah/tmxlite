@@ -48,7 +48,7 @@ Object::Object()
 }
 
 //public
-void Object::parse(const pugi::xml_node& node, Map* map)
+void Object::parse(const pugi::xml_node& node, Map* map, const IOAdapter& adapter)
 {
     std::string attribString = node.name();
     if (attribString != "object")
@@ -116,7 +116,7 @@ void Object::parse(const pugi::xml_node& node, Map* map)
     std::string templateStr = node.attribute("template").as_string();
     if (!templateStr.empty() && map)
     {
-        parseTemplate(templateStr, map);
+        parseTemplate(templateStr, map, adapter);
     }
 }
 
@@ -202,7 +202,7 @@ void Object::parseText(const pugi::xml_node& node)
     m_textData.content = node.text().as_string();
 }
 
-void Object::parseTemplate(const std::string& path, Map* map)
+void Object::parseTemplate(const std::string& path, Map* map, const IOAdapter& adapter)
 {
     assert(map);
 
@@ -238,7 +238,7 @@ void Object::parseTemplate(const std::string& path, Map* map)
                 templateTilesets.count(tilesetName) == 0)
             {
                 templateTilesets.insert(std::make_pair(tilesetName, Tileset(map->getWorkingDirectory())));
-                templateTilesets.at(tilesetName).parse(tileset, map);
+                templateTilesets.at(tilesetName).parse(tileset, adapter, map);
             }
         }
 
@@ -248,7 +248,7 @@ void Object::parseTemplate(const std::string& path, Map* map)
         if (obj)
         {
             templateObjects.insert(std::make_pair(path, Object()));
-            templateObjects[path].parse(obj, nullptr);
+            templateObjects[path].parse(obj, nullptr, adapter);
             templateObjects[path].m_tilesetName = tilesetName;
         }
     }

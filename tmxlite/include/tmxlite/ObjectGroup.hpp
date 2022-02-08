@@ -51,7 +51,7 @@ namespace tmx
         ObjectGroup();
 
         Type getType() const override { return Layer::Type::Object; }
-        void parse(const pugi::xml_node&, Map*) override;
+        void parse(const pugi::xml_node&, const IOAdapter&, Map*) override;
 
         /*!
         \brief Returns the colour associated with this layer

@@ -28,6 +28,7 @@ source distribution.
 #pragma once
 
 #include <tmxlite/Config.hpp>
+#include <tmxlite/IO.hpp>
 #include <tmxlite/Property.hpp>
 #include <tmxlite/Types.hpp>
 
@@ -99,7 +100,7 @@ namespace tmx
         \brief Attempts to parse the given xml node and
         read the Object properties if it is valid.
         */
-        void parse(const pugi::xml_node&, Map*);
+        void parse(const pugi::xml_node&, Map*, const IOAdapter& adapter);
 
         /*!
         \brief Returns the unique ID of the Object
@@ -211,6 +212,6 @@ namespace tmx
 
         void parsePoints(const pugi::xml_node&);
         void parseText(const pugi::xml_node&);
-        void parseTemplate(const std::string&, Map*);
+        void parseTemplate(const std::string&, Map*, const IOAdapter& adapter);
     };
 }

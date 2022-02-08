@@ -40,7 +40,7 @@ ImageLayer::ImageLayer(const std::string& workingDir)
 }
 
 //public
-void ImageLayer::parse(const pugi::xml_node& node, Map*)
+void ImageLayer::parse(const pugi::xml_node& node, const IOAdapter&, Map*)
 {
     std::string attribName = node.name();
     if (attribName != "imagelayer")

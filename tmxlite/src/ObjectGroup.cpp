@@ -40,7 +40,7 @@ ObjectGroup::ObjectGroup()
 }
 
 //public
-void ObjectGroup::parse(const pugi::xml_node& node, Map* map)
+void ObjectGroup::parse(const pugi::xml_node& node, const IOAdapter& adapter, Map* map)
 {
     assert(map);
 
@@ -84,7 +84,7 @@ void ObjectGroup::parse(const pugi::xml_node& node, Map* map)
         else if (attribString == "object")
         {
             m_objects.emplace_back();
-            m_objects.back().parse(child, map);
+            m_objects.back().parse(child, map, adapter);
         }
     }
 }
